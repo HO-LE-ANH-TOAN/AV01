@@ -1,0 +1,223 @@
+[
+    {
+        "id": "tab_demo_mqtt",
+        "type": "tab",
+        "label": "Demo MQTT A-B",
+        "disabled": false,
+        "info": "Giao tiếp 2 chiều A và B qua MQTT"
+    },
+    {
+        "id": "inject_a",
+        "type": "inject",
+        "z": "tab_demo_mqtt",
+        "name": "A gửi: Xin chào B",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "Xin chào B",
+        "payloadType": "str",
+        "x": 170,
+        "y": 140,
+        "wires": [
+            [
+                "mqtt_out_a"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_out_a",
+        "type": "mqtt out",
+        "z": "tab_demo_mqtt",
+        "name": "A gửi đến B",
+        "topic": "demo/a_to_b",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "s_broker",
+        "x": 430,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "mqtt_in_b",
+        "type": "mqtt in",
+        "z": "tab_demo_mqtt",
+        "name": "B nhận từ A",
+        "topic": "demo/a_to_b",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "d_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 260,
+        "wires": [
+            [
+                "debug_b",
+                "function_b"
+            ]
+        ]
+    },
+    {
+        "id": "debug_b",
+        "type": "debug",
+        "z": "tab_demo_mqtt",
+        "name": "B nhận được tin nhắn",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 470,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "function_b",
+        "type": "function",
+        "z": "tab_demo_mqtt",
+        "name": "B tạo phản hồi",
+        "func": "let message = msg.payload;\nmsg.payload = \"B đã nhận được tin nhắn: \" + message;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 300,
+        "wires": [
+            [
+                "mqtt_out_b"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_out_b",
+        "type": "mqtt out",
+        "z": "tab_demo_mqtt",
+        "name": "B phản hồi A",
+        "topic": "demo/b_to_a",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d_broker",
+        "x": 700,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "mqtt_in_a",
+        "type": "mqtt in",
+        "z": "tab_demo_mqtt",
+        "name": "A nhận phản hồi từ B",
+        "topic": "demo/b_to_a",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "d_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 410,
+        "wires": [
+            [
+                "debug_a"
+            ]
+        ]
+    },
+    {
+        "id": "debug_a",
+        "type": "debug",
+        "z": "tab_demo_mqtt",
+        "name": "A nhận phản hồi",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 410,
+        "wires": []
+    },
+    {
+        "id": "s_broker",
+        "type": "mqtt-broker",
+        "name": "HiveMQ public",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "d_broker",
+        "type": "mqtt-broker",
+        "name": "HiveMQ public",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
